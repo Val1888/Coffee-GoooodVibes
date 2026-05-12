@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Good Vibes Coffee{% endblock %}</title>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+    
+    {% block styles %}{% endblock %}
+</head>
+<body>
+
+<header class="main-header">
+    <div class="top-bar">
+        <div class="logo-area">
+            <div class="logo-circle"></div> 
+            <h1 class="site-title">Good Vibes Coffee</h1>
+        </div>
+        
+        <div class="auth-links">
+            {% if session.get('logged_in') %}
+                <a href="{{ url_for('cerrar_sesion_vista') }}" class="logout-link">Cerrar Sesión</a>
+            {% else %}
+                <a href="{{ url_for('login') }}">Log In</a>
+                <a href="{{ url_for('signup') }}">Sign Up</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <nav class="main-nav">
+        <ul>
+            <li><a href="{{ url_for('home') }}">Inicio</a></li>
+            <li><a href="{{ url_for('menu') }}">Cafés</a></li>
+            <li><a href="{{ url_for('pago') }}">Carrito</a></li> 
+            <li><a href="{{ url_for('cuenta') }}">Cuenta</a></li> 
+            <li><a href="{{ url_for('nosotros') }}">Nosotros</a></li>
+            <li><a href="{{ url_for('locales') }}">Locales</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="content-wrapper">
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="main-footer">
+    <div class="footer-content">
+        <p>Contacto: goodvibescoffe@mail.com | Aviso Legal | Políticas</p>
+        <p>© 2026 Good Vibes Coffee. Derechos Reservados</p>
+    </div>
+</footer>
+
+</body>
+</html>

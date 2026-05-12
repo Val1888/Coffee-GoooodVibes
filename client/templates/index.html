@@ -9,28 +9,11 @@
 </head>
 <body>
 
-<header>
-    <div class="top-bar">
-        <div class="logo-area">
-            <div class="logo-circle"></div> 
-            <h1 class="site-title">Good Vibes Coffee</h1>
-        </div>
-        <div class="logout">
-            <a href="#" style="text-decoration:none; color:inherit;">Cerrar Sesión</a>
-        </div>
-    </div>
+{% extends "navbar.html" %}
 
-    <nav>
-        <ul>
-            <li><a href="index.html" class="active">Inicio</a></li>
-            <li><a href="client/menu.html">Cafés</a></li>
-            <li><a href="client/auth/carrito.html">Carrito</a></li>
-            <li><a href="client/auth/cuenta.html">Cuenta</a></li>
-            <li><a href="client/about.html">Nosotros</a></li>
-            <li><a href="client/locales.html">Locales</a></li>
-        </ul>
-    </nav>
-</header>
+{% block title %} Inicio - Good Vibes {% endblock %}
+
+{% block content %}
 
     <main class="hero">
         <div class="hero-content">
@@ -51,6 +34,6 @@
             <img src="asets/imagenes/tazaCafeBienvenida.png" alt="Taza de café">
         </div>
     </main>
-
+{% endblock %}
 </body>
 </html>

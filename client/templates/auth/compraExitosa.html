@@ -1,0 +1,31 @@
+{% extends "navbar.html" %}
+
+{% block title %} Good Vibes - ¡Compra Exitosa! {% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pago.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="payment-page" style="text-align: center; padding: 100px 20px;">
+
+    <div class="success-icon" style="font-size: 80px; margin-bottom: 20px;">
+        ☕✨
+    </div>
+
+    <h1 class="payment-title">
+        ¡Pago realizado con éxito!
+    </h1>
+
+    <p style="font-size:24px; margin-top:20px; color: #5d4037;">
+        Gracias por tu compra. Tu pedido está siendo preparado con buenas vibras.
+    </p>
+
+    <div style="margin-top: 50px;">
+        <button class="payment-btn" onclick="window.location.href='{{ url_for('index') }}'">
+            Volver al inicio
+        </button>
+    </div>
+
+</main>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "navbar.html" %}
+
+{% block title %} Ubicaciones - Good Vibes Coffee {% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/locales.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="locations-page">
+
+    <section class="locations-container">
+
+        <h2 class="locations-title">
+            Puntos de Buenas Energías
+        </h2>
+
+        <div class="locations-grid">
+
+            <div class="location-card">
+                <div class="location-image"></div>
+                <h3 class="location-name">
+                    Local Insurgentes
+                </h3>
+                <p class="location-address">
+                    Av. Insurgentes #230 Col. Las
+                    Buenas Vibras 33002
+                </p>
+            </div>
+
+            <div class="location-card">
+                <div class="location-image"></div>
+                <h3 class="location-name">
+                    Próximamente
+                </h3>
+                <p class="location-address">Mantente atento a nuestras redes.</p>
+            </div>
+
+            <div class="location-card">
+                <div class="location-image"></div>
+                <h3 class="location-name">
+                    Próximamente
+                </h3>
+                <p class="location-address">¡Llevando vibras a más lugares!</p>
+            </div>
+
+        </div>
+
+        <h2 class="visit-text">
+            ¡Visítanos en nuestra sucursal!
+        </h2>
+
+    </section>
+
+</main>
+{% endblock %}

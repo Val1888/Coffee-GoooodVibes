@@ -1,0 +1,124 @@
+{% extends "navbar.html" %}
+
+{% block title %} Good Vibes - Carrito {% block title %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/carrito.css') }}">
+
+<main>
+    {% if session.get('logged_in') %}
+        <h2 class="cart-title">
+            Carrito de {{ session.get('user_email') }}
+        </h2>
+
+        <section class="cart-table">
+            <div class="table-header">
+                <div>Producto</div>
+                <div>Tamaño</div>
+                <div>Precio</div>
+                <div>Cantidad</div>
+                <div>Total</div>
+            </div>
+
+            <div class="table-row">
+                <div>Café expreso</div>
+                <div>Ch</div>
+                <div>$23.00</div>
+                <div>x1</div>
+                <div>$23.00</div>
+            </div>
+
+            <div class="table-row">
+                <div>Shaky coffe</div>
+                <div>G</div>
+                <div>$70.00</div>
+                <div>x3</div>
+                <div>$140.00</div>
+            </div>
+        </section>
+
+        <section class="cart-bottom">
+            <div class="left-side">
+                <div class="input-group">
+                    <label>Código de Promoción</label>
+                    <div class="row-flex">
+                        <input type="text" id="promoCode" class="input-box" placeholder="Ingresa código">
+                        <button class="button" onclick="usarCodigo()">Usar Código</button>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Puntos Disponibles</label>
+                    <div class="row-flex">
+                        <input type="number" id="pointsInput" class="input-box" placeholder="0">
+                        <button class="button" onclick="usarPuntos()">Usar Puntos</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-box">
+                <div class="summary-row">
+                    <span>Descuento</span>
+                    <span id="discountText">$0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span>$163.00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Total Final</span>
+                    <span id="totalText">$163.00</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="final-row">
+            <h2 class="slogan">Siempre dando lo mejor en todo</h2>
+            <button class="payment-btn" onclick="window.location.href='{{ url_for('pago') }}'">
+                Método de pago
+            </button>
+        </section>
+    {% else %}
+        <section class="error-container" style="text-align: center; padding: 50px;">
+            <h2>¡Vaya! Parece que no has iniciado sesión</h2>
+            <p>Necesitas una cuenta para poder comprar nuestros cafés.</p>
+            <a href="{{ url_for('login') }}" class="button">Iniciar Sesión ahora</a>
+        </section>
+    {% endif %}
+</main>
+
+<script>
+    // Mantenemos tu lógica de JS para los cálculos rápidos en el cliente
+    let total = 163;
+    let descuento = 0;
+
+    function usarCodigo(){
+        const codigo = document.getElementById("promoCode").value;
+        if(codigo === "KS7TA2"){
+            descuento = 20;
+            actualizarTotal();
+            alert("Código aplicado: -$20.00");
+        } else {
+            alert("Código inválido");
+        }
+    }
+
+    function usarPuntos(){
+        const puntos = parseInt(document.getElementById("pointsInput").value);
+        if(isNaN(puntos) || puntos <= 0){
+            alert("Ingresa puntos válidos");
+            return;
+        }
+        descuento += puntos / 10;
+        actualizarTotal();
+        alert("Puntos aplicados correctamente");
+    }
+
+    function actualizarTotal(){
+        let nuevoTotal = total - descuento;
+        if(nuevoTotal < 0) nuevoTotal = 0;
+        document.getElementById("discountText").innerText = "$" + descuento.toFixed(2);
+        document.getElementById("totalText").innerText = "$" + nuevoTotal.toFixed(2);
+    }
+</script>
+{% endblock %}

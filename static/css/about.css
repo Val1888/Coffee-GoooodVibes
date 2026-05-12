@@ -1,0 +1,51 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Georgia, serif;
+    background:#e7e7e7;
+}
+
+
+
+
+.about-page{
+    width:100%;
+    min-height:650px;
+
+    background:linear-gradient(
+        to bottom,
+        #ececec 0%,
+        #ececec 50%,
+        #6f8369 50%,
+        #6f8369 100%
+    );
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.about-box{
+    width:700px;
+
+    background:#f1ebe5;
+
+    padding:40px 45px;
+}
+
+.about-box h2{
+    text-align:center;
+    font-size:55px;
+    margin-bottom:25px;
+}
+
+.about-box p{
+    font-size:22px;
+    line-height:1.6;
+    margin-bottom:20px;
+}
+

@@ -1,0 +1,95 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Georgia, serif;
+    background:#f5efe4;
+
+    width:100%;
+    height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.logout-box{
+
+    width:700px;
+
+    background:white;
+
+    border-radius:40px;
+
+    padding:60px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,0.15);
+
+    text-align:center;
+}
+
+.logout-title{
+
+    font-size:52px;
+
+    margin-bottom:20px;
+}
+
+.logout-text{
+
+    font-size:28px;
+
+    margin-bottom:50px;
+
+    color:#555;
+}
+
+.button-row{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:30px;
+}
+
+.logout-btn{
+
+    width:220px;
+    height:70px;
+
+    border:none;
+
+    border-radius:40px;
+
+    background:#70806a;
+
+    color:white;
+
+    font-size:24px;
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:0.2s;
+}
+
+.logout-btn:hover{
+
+    transform:scale(1.05);
+
+    background:#5d6b58;
+}
+
+.cancel-btn{
+
+    background:#b8b1a4;
+}
+
+.cancel-btn:hover{
+
+    background:#9b9488;
+}

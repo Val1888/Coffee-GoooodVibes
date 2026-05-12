@@ -1,0 +1,90 @@
+/* Estilo general del Header */
+.main-header {
+    width: 100%;
+    background-color: white;
+    font-family: Georgia, serif;
+    border-bottom: 1px solid #d8cbb4;
+}
+
+/* Barra superior: Logo a la izquierda, Login/Signup a la derecha */
+.top-bar {
+    height: 90px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo-circle {
+    width: 50px;
+    height: 50px;
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+}
+
+.site-title {
+    font-size: 28px;
+    font-weight: 400;
+    color: #333;
+}
+
+/* Links de Auth (Log In / Sign Up) */
+.auth-links {
+    display: flex;
+    gap: 20px;
+}
+
+.auth-links a {
+    text-decoration: none;
+    color: #333;
+    font-size: 18px;
+}
+
+.auth-links a:hover {
+    color: #70806a;
+    font-weight: bold;
+}
+
+/* Menú de Navegación Horizontal */
+.main-nav {
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+}
+
+.main-nav ul {
+    display: flex;
+    list-style: none;
+    gap: 45px; /* Esto separa Inicio, Cafés, etc. */
+    margin: 0;
+    padding: 0;
+}
+
+.main-nav a {
+    text-decoration: none;
+    color: black;
+    font-size: 20px;
+}
+
+.main-nav a:hover {
+    color: #70806a;
+}
+
+/* Ajuste del Footer para que no choque */
+.main-footer {
+    background-color: #f9f9f9;
+    padding: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    margin-top: auto;
+}

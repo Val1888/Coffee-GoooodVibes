@@ -1,0 +1,81 @@
+{% extends "navbar.html" %}
+
+{% block title %} Menú - Good Vibes Coffee {% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}">
+{% endblock %}
+
+{% block content %}
+<main>
+
+    <h2 class="section-title">
+        Nuestros Mejores Cafés
+    </h2>
+
+    <section class="products-grid">
+
+        <div class="product-card">
+            {% if session.get('logged_in') %}
+                <div class="quantity-circle">1</div>
+            {% endif %}
+            
+            <div class="product-image"></div>
+            <h3 class="product-name">Frapuchino</h3>
+            <p class="product-price">$23.00</p>
+        </div>
+
+        <div class="product-card">
+            {% if session.get('logged_in') %}
+                <div class="quantity-circle">0</div>
+            {% endif %}
+            
+            <div class="product-image"></div>
+            <h3 class="product-name">Caramelo</h3>
+            <p class="product-price">$23.00</p>
+        </div>
+
+        <div class="product-card">
+            {% if session.get('logged_in') %}
+                <div class="quantity-circle">0</div>
+            {% endif %}
+            
+            <div class="product-image"></div>
+            <h3 class="product-name">Descafeinado</h3>
+            <p class="product-price">$20.00</p>
+        </div>
+
+    </section>
+
+    <div class="offer-title-wrapper">
+        <div class="arrow">↘</div>
+        <h2 class="section-title">
+            Nuestras mejores ofertas
+        </h2>
+    </div>
+
+    <section class="products-grid">
+        <div class="product-card">
+            {% if session.get('logged_in') %}
+                <div class="quantity-circle">0</div>
+            {% endif %}
+            <div class="product-image"></div>
+        </div>
+
+        <div class="product-card">
+            {% if session.get('logged_in') %}
+                <div class="quantity-circle">0</div>
+            {% endif %}
+            <div class="product-image"></div>
+        </div>
+
+        <div class="product-card">
+            {% if session.get('logged_in') %}
+                <div class="quantity-circle">0</div>
+            {% endif %}
+            <div class="product-image"></div>
+        </div>
+    </section>
+
+</main>
+{% endblock %}

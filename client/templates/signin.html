@@ -1,0 +1,75 @@
+{% extends "navbar.html" %}
+
+{% block title %} Registro - Good Vibes Coffee {% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="login-container">
+
+    <section class="left-side">
+        <div class="shape"></div>
+        <div class="coffee-image"></div>
+    </section>
+
+    <section class="right-side">
+
+        <h2 class="welcome-title">
+            Quizá este es el momento de algo nuevo
+        </h2>
+
+        <h3 class="form-title">
+            Registrarse
+        </h3>
+
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for message in messages %}
+              <p style="color: #d9534f; font-size: 14px; margin-bottom: 10px;">{{ message }}</p>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('signup') }}" method="POST">
+
+            <input
+                type="text"
+                name="nombre"
+                placeholder="Nombre"
+                required
+            >
+
+            <input
+                type="email"
+                name="correo"
+                placeholder="Correo"
+                required
+            >
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Contraseña"
+                required
+            >
+
+            <a class="forgot-link" href="#">
+                Aplican términos y condiciones
+            </a>
+
+            <button type="submit">
+                Registrarse
+            </button>
+
+            <p style="margin-top: 20px; font-size: 14px;">
+                ¿Ya tienes cuenta? <a href="{{ url_for('login') }}" style="color: #6F4E37; font-weight: bold;">Inicia sesión</a>
+            </p>
+
+        </form>
+
+    </section>
+
+</main>
+{% endblock %}

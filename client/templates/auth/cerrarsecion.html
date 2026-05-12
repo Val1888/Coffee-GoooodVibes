@@ -1,0 +1,30 @@
+{% extends "navbar.html" %}
+
+{% block title %} Good Vibes - Cerrar Sesión {% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/logout.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="logout-page">
+    <div class="logout-container">
+        
+        <div class="logout-image-section">
+            <div class="blob-background"></div>
+            <img src="{{ url_for('static', filename='assets/imagenes/taza_logout.png') }}" alt="Taza Coffee" class="coffee-cup">
+        </div>
+
+        <div class="logout-content-section">
+            <h1 class="logout-title">¿Nos volveremos a ver?</h1>
+            <p class="logout-subtitle">¿Seguro que deseas cerrar sesión?</p>
+            
+            <div class="logout-actions">
+                <a href="{{ url_for('home') }}" class="btn-logout btn-back">VOLVER</a>
+                <a href="{{ url_for('logout') }}" class="btn-logout btn-confirm">CERRAR</a>
+            </div>
+        </div>
+
+    </div>
+</main>
+{% endblock %}

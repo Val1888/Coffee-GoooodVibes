@@ -1,0 +1,49 @@
+{% extends "navbar.html" %}
+
+{% block title %} Good Vibes - Historial {% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/historial.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="history-page">
+    {% if session.get('logged_in') %}
+        <section class="history-container">
+
+            <h2 class="history-title">Historial de Compras</h2>
+
+            <div class="history-header">
+                <div>No. Pedido</div>
+                <div>Productos</div>
+                <div>Fecha</div>
+                <div>Status</div>
+                <div>Total</div>
+            </div>
+
+            <div class="history-body">
+                <div class="history-row">
+                    <div>2739</div>
+                    <div>4 productos</div>
+                    <div>20/04/2026 15:53</div>
+                    <div class="status-process">En proceso</div>
+                    <div>$163.00</div>
+                </div>
+                </div>
+
+            <div class="history-button-row">
+                <button class="history-btn" onclick="window.location.href='{{ url_for('cuenta') }}'">
+                    Volver a Mi Cuenta
+                </button>
+            </div>
+
+        </section>
+    {% else %}
+        <section style="text-align: center; padding: 100px;">
+            <h2>¿Buscando tus pedidos?</h2>
+            <p>Inicia sesión para ver el rastro de tus cafés favoritos.</p>
+            <a href="{{ url_for('login') }}" class="btn-confirm">Ir al Login</a>
+        </section>
+    {% endif %}
+</main>
+{% endblock %}

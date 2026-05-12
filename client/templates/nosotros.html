@@ -1,0 +1,34 @@
+{% extends "navbar.html" %}
+
+{% block title %} Nosotros - Good Vibes Coffee {% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="about-page">
+
+    <section class="about-box">
+
+        <h2>Sobre Nosotros</h2>
+
+        <p>
+            En Good Vibes Coffee buscamos crear un espacio relajado,
+            moderno y lleno de buenas vibras para jóvenes adultos.
+            Más que solo café, ofrecemos una experiencia cómoda para
+            estudiar, trabajar, convivir o simplemente desconectarse
+            un momento del día.
+        </p>
+
+        <p>
+            Nuestros cafés están preparados con ingredientes de calidad
+            y pensados para acompañar cualquier momento, desde mañanas
+            tranquilas hasta reuniones con amigos. Queremos que cada
+            visita se sienta cálida, cercana y auténtica.
+        </p>
+
+    </section>
+
+</main>
+{% endblock %}

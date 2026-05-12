@@ -1,0 +1,119 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Georgia, serif;
+    background:#c9cfad;
+}
+
+
+
+/* MAIN */
+
+.login-container{
+    width:100%;
+    height:calc(100vh - 145px);
+
+    display:flex;
+}
+
+/* LEFT */
+
+.left-side{
+    width:45%;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    position:relative;
+}
+
+.shape{
+    width:350px;
+    height:350px;
+
+    background:#6f826e;
+
+    position:absolute;
+
+    transform:rotate(20deg);
+}
+
+.coffee-image{
+    width:320px;
+    height:420px;
+
+    background:white;
+
+    position:relative;
+    z-index:2;
+}
+
+/* RIGHT */
+
+.right-side{
+    width:55%;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.welcome-title{
+    font-size:68px;
+    font-weight:400;
+
+    margin-bottom:40px;
+}
+
+.form-title{
+    font-size:28px;
+    margin-bottom:20px;
+}
+
+form{
+    width:430px;
+
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+input{
+    height:85px;
+
+    border:none;
+    border-radius:25px;
+
+    padding-left:20px;
+
+    font-size:24px;
+}
+
+.forgot-link{
+    text-align:right;
+    color:#444;
+    font-size:18px;
+}
+
+button{
+    width:250px;
+    height:70px;
+
+    border:none;
+    border-radius:40px;
+
+    background:#70806a;
+    color:white;
+
+    font-size:32px;
+    font-weight:bold;
+
+    cursor:pointer;
+
+    margin-top:10px;
+}

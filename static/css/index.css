@@ -1,0 +1,155 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Georgia, serif;
+    background:#c7ceb0;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+    width:100%;
+    min-height:610px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:60px 80px;
+}
+
+.hero-left{
+    width:50%;
+}
+
+.welcome-text{
+    font-size:58px;
+    font-weight:400;
+    margin-bottom:10px;
+}
+
+.name-text{
+    font-size:105px;
+    color:#667760;
+    margin-bottom:20px;
+}
+
+.question-text{
+    font-size:58px;
+    font-weight:400;
+}
+
+.day-text{
+    font-size:105px;
+    color:#f3e8db;
+    margin-top:10px;
+}
+
+.hero-button-row{
+    margin-top:50px;
+
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+.arrow{
+    font-size:90px;
+    color:#667760;
+}
+
+.coffee-btn{
+    width:230px;
+    height:75px;
+
+    background:#667760;
+    border-radius:50px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    text-decoration:none;
+    color:#f7eee4;
+
+    font-size:40px;
+    font-weight:bold;
+}
+
+/* =========================
+   RIGHT SIDE
+========================= */
+
+.hero-right{
+    width:45%;
+    position:relative;
+    height:500px;
+}
+
+.flower-shape{
+    width:350px;
+    height:350px;
+
+    background:#efe1d2;
+    border-radius:50%;
+
+    position:absolute;
+    right:30px;
+    top:70px;
+}
+
+.coffee-circle{
+    width:360px;
+    height:360px;
+
+    background:white;
+    border-radius:50%;
+
+    position:absolute;
+    top:110px;
+    left:30px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,0.15);
+}
+
+.heart{
+    width:240px;
+    height:240px;
+
+    background:#cc4c62;
+
+    position:absolute;
+    top:0;
+    left:120px;
+
+    transform:rotate(-45deg);
+}
+
+.heart::before,
+.heart::after{
+    content:"";
+
+    width:240px;
+    height:240px;
+
+    background:#cc4c62;
+    border-radius:50%;
+
+    position:absolute;
+}
+
+.heart::before{
+    top:-120px;
+    left:0;
+}
+
+.heart::after{
+    left:120px;
+    top:0;
+}

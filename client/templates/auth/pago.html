@@ -1,0 +1,80 @@
+{% extends "navbar.html" %}
+
+{% block title %} Good Vibes - Pago {% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pago.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="payment-page">
+    {% if session.get('logged_in') %}
+        <h2 class="payment-title">Método de Pago</h2>
+
+        <section class="payment-layout">
+            <div class="payment-left">
+                <div class="method-box">
+                    <div class="method-header">Selecciona tu método de pago</div>
+                    <div class="method-content">
+                        <label class="radio-row">
+                            <input type="radio" name="payment" checked>
+                            <span>Tarjeta de Débito</span>
+                        </label>
+                        <label class="radio-row">
+                            <input type="radio" name="payment">
+                            <span>Tarjeta de Crédito</span>
+                        </label>
+                        <label class="radio-row">
+                            <input type="radio" name="payment">
+                            <span>Puntos</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="payment-summary">
+                    <div class="summary-line">
+                        <span>Precio en puntos</span>
+                        <span>500 pts</span>
+                    </div>
+                    <div class="summary-line">
+                        <span>Descuento</span>
+                        <span>—</span>
+                    </div>
+                    <div class="summary-line">
+                        <span>Total</span>
+                        <span>$163.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-box">
+                <h3 class="card-title">Información de la Tarjeta</h3>
+                <form class="card-form">
+                    <input type="text" placeholder="Titular de la Tarjeta" class="large-input">
+                    <input type="text" placeholder="No. de Cuenta" class="large-input">
+                    <div class="small-input-row">
+                        <input type="text" placeholder="Fecha Exp" class="small-input">
+                        <input type="text" placeholder="CVV" class="small-input">
+                    </div>
+                    <p class="terms">Aplican términos y condiciones</p>
+                </form>
+            </div>
+        </section>
+
+        <section class="payment-buttons">
+            <button class="payment-btn" onclick="window.location.href='{{ url_for('pago') }}'">
+                Volver
+            </button>
+            <button class="payment-btn" type="submit">
+                Pagar
+            </button>
+        </section>
+    {% else %}
+        <section style="text-align: center; padding: 100px;">
+            <h2>¡Casi listo para tu café!</h2>
+            <p>Pero primero necesitamos saber quién eres. Inicia sesión para completar tu compra.</p>
+            <a href="{{ url_for('login') }}" class="button">Ir al Login</a>
+        </section>
+    {% endif %}
+</main>
+{% endblock %}

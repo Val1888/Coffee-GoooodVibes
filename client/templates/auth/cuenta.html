@@ -1,0 +1,69 @@
+{% extends "navbar.html" %}
+
+{% block title %} Good Vibes - Mi Cuenta {% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cuenta.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="account-page">
+    {% if session.get('logged_in') %}
+        <section class="account-container">
+
+            <h2 class="account-title">Cuenta Personal</h2>
+
+            <div class="account-layout">
+                <div class="profile-section">
+                    <button class="edit-photo-btn">Editar Foto</button>
+
+                    <div class="profile-image">
+                        <div class="avatar-head"></div>
+                        <div class="avatar-body"></div>
+                    </div>
+
+                    <h3 class="level-text">nvl: {{ nivel }}</h3>
+                    <h3 class="rank-text">{{ rango }}</h3>
+                    <p class="points-text">
+                        Puntos: {{ usuario.puntos if usuario.puntos else 0 }} pts
+                    </p>
+                </div>
+
+                <div class="account-info">
+                    <h3 class="info-title">Información de la cuenta</h3>
+
+                    <div class="info-content">
+                        <p><strong>Nombre:</strong> {{ usuario.nombre }}</p>
+                        <p><strong>Correo:</strong> {{ usuario.correo }}</p>
+                        <p>
+                            <strong>Teléfono:</strong> 
+                            {% if usuario.telefono %}
+                                {{ usuario.telefono }}
+                            {% else %}
+                                <span style="color: #888;">+ Ingresa un número telefónico</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="account-buttons">
+                <button class="account-btn" onclick="window.location.href='{{ url_for('historial') }}'">
+                    Historial de Compras
+                </button>
+
+                <button class="account-btn" onclick="window.location.href='{{ url_for('home') }}'">
+                    Ir a inicio
+                </button>
+            </div>
+
+        </section>
+    {% else %}
+        <section style="text-align: center; padding: 100px;">
+            <h2>Acceso Restringido</h2>
+            <p>Debes iniciar sesión para ver tu perfil.</p>
+            <a href="{{ url_for('login') }}">Ir al Login</a>
+        </section>
+    {% endif %}
+</main>
+{% endblock %}
