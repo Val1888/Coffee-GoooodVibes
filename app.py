@@ -59,13 +59,13 @@ def login():
             
     return render_template('login.html')
 
-@app.route('/signup', methods=['GET', 'POST'])
+@app.route('/signin', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
         nombre = request.form.get('nombre')
         correo = request.form.get('correo')
         password = request.form.get('password')
-        
+
         # Lógica para crear usuario en la DB
         if crear_usuario(nombre, correo, password):
             flash('¡Cuenta creada con éxito! Ya puedes iniciar sesión.')
@@ -81,18 +81,24 @@ def signup():
 @login_required
 def cuenta():
     user_id = session.get('user_id')
-    user_data = obtener_usuario_por_id(user_id)
+    # Guardamos los datos en la variable 'usuario' para que coincida con lo de abajo
+    usuario = obtener_usuario_por_id(user_id) 
     
-    # Lógica de niveles
-    puntos = user_data.get('puntos', 0)
-    nivel = (puntos // 100) + 1
+    if not usuario:
+        return redirect(url_for('login')) # Seguridad por si no encuentra al usuario
     
+    # Lógica de niveles (ahora 'usuario' y 'puntos_usuario' coinciden)
+    puntos_usuario = usuario.get('puntos') or 0
+    nivel = (puntos_usuario // 100) + 1
+    
+    # Lógica de rangos
     if nivel <= 3: rango = "Amante del Café"
     elif nivel <= 6: rango = "Entusiasta del Café"
     elif nivel <= 10: rango = "Maestro Cafetero"
     else: rango = "Leyenda del Café"
 
-    return render_template('auth/cuenta.html', usuario=user_data, nivel=nivel, rango=rango)
+    # Enviamos 'usuario' al template
+    return render_template('auth/cuenta.html', usuario=usuario, nivel=nivel, rango=rango)
 
 @app.route('/pago')
 @login_required

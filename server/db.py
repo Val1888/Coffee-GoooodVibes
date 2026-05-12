@@ -16,7 +16,7 @@ def validar_login(email, password):
     usuario = obtener_usuario_por_email(email)
     if usuario:
         # Comparamos la contraseña escrita con la de la base de datos
-        if bcrypt.check_password_hash(usuario['password'], password):
+        if bcrypt.check_password_hash(usuario['contraseña'], password):
             return usuario
     return None
 
