@@ -3,17 +3,25 @@
 {% block title %} Registro - Good Vibes Coffee {% endblock %}
 
 {% block styles %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
 {% endblock %}
 
 {% block content %}
+
 <main class="login-container">
 
+    <!-- LEFT SIDE -->
     <section class="left-side">
+
         <div class="shape"></div>
-        <div class="coffee-image"></div>
+
+        <div class="coffee-image">
+            <img src="{{ url_for('static', filename='imagenes/cafesepalabola.png') }}" alt="Coffee Signup">
+        </div>
+
     </section>
 
+    <!-- RIGHT SIDE -->
     <section class="right-side">
 
         <h2 class="welcome-title">
@@ -25,11 +33,11 @@
         </h3>
 
         {% with messages = get_flashed_messages() %}
-          {% if messages %}
-            {% for message in messages %}
-              <p style="color: #d9534f; font-size: 14px; margin-bottom: 10px;">{{ message }}</p>
-            {% endfor %}
-          {% endif %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="error-message">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
         {% endwith %}
 
         <form action="{{ url_for('signup') }}" method="POST">
@@ -63,8 +71,11 @@
                 Registrarse
             </button>
 
-            <p style="margin-top: 20px; font-size: 14px;">
-                ¿Ya tienes cuenta? <a href="{{ url_for('login') }}" style="color: #6F4E37; font-weight: bold;">Inicia sesión</a>
+            <p class="login-link">
+                ¿Ya tienes cuenta?
+                <a href="{{ url_for('login') }}">
+                    Inicia sesión
+                </a>
             </p>
 
         </form>
@@ -72,4 +83,5 @@
     </section>
 
 </main>
+
 {% endblock %}

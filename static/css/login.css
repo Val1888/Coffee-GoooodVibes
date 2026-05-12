@@ -34,28 +34,41 @@ body{
 
     position:relative;
 }
-
 .shape{
     width:350px;
     height:350px;
 
-    background:#6f826e;
+  
 
     position:absolute;
 
     transform:rotate(20deg);
+
+    border-radius:40px;
 }
-
 .coffee-image{
-    width:320px;
-    height:420px;
+    width:520px;
+    height:620px;
 
-    background:white;
 
     position:relative;
     z-index:2;
+
+    border-radius:30px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    overflow:hidden;
 }
 
+.coffee-image img{
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+}
 /* RIGHT */
 
 .right-side{

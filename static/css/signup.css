@@ -9,18 +9,22 @@ body{
     background:#c9cfad;
 }
 
-
-
-/* MAIN */
+/* MAIN CONTAINER */
 
 .login-container{
     width:100%;
-    height:calc(100vh - 145px);
+    min-height:80vh;
 
     display:flex;
+    align-items:center;
+    justify-content:center;
+
+    gap:70px;
+
+    padding:50px 80px;
 }
 
-/* LEFT */
+/* LEFT SIDE */
 
 .left-side{
     width:45%;
@@ -32,28 +36,36 @@ body{
     position:relative;
 }
 
-.shape{
-    width:350px;
-    height:350px;
 
-    background:#6f826e;
-
-    position:absolute;
-
-    transform:rotate(20deg);
-}
 
 .coffee-image{
-    width:320px;
-    height:420px;
-
-    background:white;
+    width:520px;
+    height:620px;
 
     position:relative;
     z-index:2;
+
+    border-radius:30px;
+
+    overflow:hidden;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+   
+
+
 }
 
-/* RIGHT */
+.coffee-image img{
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+}
+
+/* RIGHT SIDE */
 
 .right-side{
     width:55%;
@@ -64,15 +76,22 @@ body{
 }
 
 .welcome-title{
-    font-size:68px;
+    font-size:52px;
     font-weight:400;
 
-    margin-bottom:40px;
+    line-height:1.1;
+
+    margin-bottom:35px;
+
+    color:#2f372c;
 }
 
 .form-title{
     font-size:28px;
+
     margin-bottom:20px;
+
+    color:#444;
 }
 
 form{
@@ -80,24 +99,41 @@ form{
 
     display:flex;
     flex-direction:column;
+
     gap:18px;
 }
 
 input{
-    height:85px;
+    height:75px;
 
     border:none;
-    border-radius:25px;
+    border-radius:20px;
 
     padding-left:20px;
 
-    font-size:24px;
+    font-size:22px;
+
+    background:white;
+
+    outline:none;
+}
+
+input:focus{
+    border:2px solid #70806a;
 }
 
 .forgot-link{
     text-align:right;
-    color:#444;
-    font-size:18px;
+
+    color:#555;
+
+    font-size:16px;
+
+    text-decoration:none;
+}
+
+.forgot-link:hover{
+    text-decoration:underline;
 }
 
 button{
@@ -110,10 +146,44 @@ button{
     background:#70806a;
     color:white;
 
-    font-size:32px;
+    font-size:28px;
     font-weight:bold;
 
     cursor:pointer;
 
     margin-top:10px;
+
+    transition:0.3s;
+}
+
+button:hover{
+    background:#5c6b57;
+
+    transform:scale(1.03);
+}
+
+.login-link{
+    margin-top:20px;
+
+    font-size:15px;
+}
+
+.login-link a{
+    color:#6F4E37;
+
+    font-weight:bold;
+
+    text-decoration:none;
+}
+
+.login-link a:hover{
+    text-decoration:underline;
+}
+
+.error-message{
+    color:#d9534f;
+
+    font-size:14px;
+
+    margin-bottom:10px;
 }

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Good Vibes Coffee</title>
-    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&family=Lora:ital@1&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -31,8 +31,8 @@
 
         <div class="hero-image">
             <div class="blob-bg"></div>
-            <img src="asets/imagenes/tazaCafeBienvenida.png" alt="Taza de café">
-        </div>
+<img src="{{ url_for('static', filename='imagenes/cafelove.png') }}" alt="Taza de café">
+       </div>
     </main>
 {% endblock %}
 </body>

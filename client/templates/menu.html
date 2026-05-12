@@ -20,7 +20,9 @@
                 <div class="quantity-circle">1</div>
             {% endif %}
             
-            <div class="product-image"></div>
+            <div class="product-image">
+            <img src="{{ url_for('static', filename='imagenes/latte_frio.png') }}" alt="Frapuchino">
+            </div>
             <h3 class="product-name">Frapuchino</h3>
             <p class="product-price">$23.00</p>
         </div>
@@ -30,17 +32,21 @@
                 <div class="quantity-circle">0</div>
             {% endif %}
             
-            <div class="product-image"></div>
+            <div class="product-image">
+            <img src="{{ url_for('static', filename='imagenes/latte.png') }}" alt="Frapuchino">
+            </div>
             <h3 class="product-name">Caramelo</h3>
             <p class="product-price">$23.00</p>
         </div>
 
-        <div class="product-card">
+            <div class="product-card">
             {% if session.get('logged_in') %}
                 <div class="quantity-circle">0</div>
             {% endif %}
             
-            <div class="product-image"></div>
+           <div class="product-image">
+            <img src="{{ url_for('static', filename='imagenes/americano.png') }}" alt="Frapuchino">
+            </div>
             <h3 class="product-name">Descafeinado</h3>
             <p class="product-price">$20.00</p>
         </div>
@@ -59,22 +65,37 @@
             {% if session.get('logged_in') %}
                 <div class="quantity-circle">0</div>
             {% endif %}
-            <div class="product-image"></div>
+            <div class="product-image">
+            <img src="{{ url_for('static', filename='imagenes/termodecafe.png') }}" alt="Frapuchino">
+             </div>
+            <h3 class="product-name">Termo de cafe </h3>
+            <p class="product-price">$80.00</p>
+           
         </div>
 
-        <div class="product-card">
+         <div class="product-card">
             {% if session.get('logged_in') %}
                 <div class="quantity-circle">0</div>
             {% endif %}
-            <div class="product-image"></div>
+            <div class="product-image">
+            <img src="{{ url_for('static', filename='imagenes/pindecafe.png') }}" alt="Frapuchino">
+             </div>
+            <h3 class="product-name">Pin de cafe </h3>
+            <p class="product-price">$20.00</p>
+           
         </div>
 
-        <div class="product-card">
+       <div class="product-card">
             {% if session.get('logged_in') %}
                 <div class="quantity-circle">0</div>
             {% endif %}
-            <div class="product-image"></div>
+            <div class="product-image">
+            <img src="{{ url_for('static', filename='imagenes/bolsadecafe.png') }}" alt="Frapuchino">
+             </div>
+            <h3 class="product-name">Bolsa de cafe </h3>
+            <p class="product-price">$130.00</p>
         </div>
+
     </section>
 
 </main>

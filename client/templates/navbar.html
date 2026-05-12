@@ -14,9 +14,9 @@
 <header class="main-header">
     <div class="top-bar">
         <div class="logo-area">
-            <div class="logo-circle"></div> 
-            <h1 class="site-title">Good Vibes Coffee</h1>
-        </div>
+    <img src="{{ url_for('static', filename='imagenes/logo_GoodVibes.png') }}" alt="Logo Coffee" class="logo-img">
+    <h1 class="site-title">Gooood Vibes Coffee</h1>
+</div>
         
         <div class="auth-links">
             {% if session.get('logged_in') %}
@@ -46,7 +46,7 @@
 
 <footer class="main-footer">
     <div class="footer-content">
-        <p>Contacto: goodvibescoffe@mail.com | Aviso Legal | Políticas</p>
+        <p>Contacto: goooodvibescoffe@mail.com | Aviso Legal | Políticas</p>
         <p>© 2026 Good Vibes Coffee. Derechos Reservados</p>
     </div>
 </footer>

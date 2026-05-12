@@ -110,8 +110,26 @@ main{
     background:#ddd;
 
     margin-bottom:20px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    overflow:hidden;
 }
 
+.product-image img{
+    width:220px;
+    height:220px;
+
+    object-fit:contain;
+
+    transition:0.3s;
+}
+
+.product-image img:hover{
+    transform:scale(1.08);
+}
 .product-name{
     font-size:34px;
 }
