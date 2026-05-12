@@ -1,12 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="asets/imagenes/coffe-good-vibes.png">
-    <title>Document</title>
+    <title>Good Vibes Coffee</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&family=Lora:ital@1&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Compren CAFEEEE</h1>
+
+<header>
+    <div class="top-bar">
+        <div class="logo-area">
+            <div class="logo-circle"></div> 
+            <h1 class="site-title">Good Vibes Coffee</h1>
+        </div>
+        <div class="logout">
+            <a href="#" style="text-decoration:none; color:inherit;">Cerrar Sesión</a>
+        </div>
+    </div>
+
+    <nav>
+        <ul>
+            <li><a href="index.html" class="active">Inicio</a></li>
+            <li><a href="client/menu.html">Cafés</a></li>
+            <li><a href="client/auth/carrito.html">Carrito</a></li>
+            <li><a href="client/auth/cuenta.html">Cuenta</a></li>
+            <li><a href="client/about.html">Nosotros</a></li>
+            <li><a href="client/locales.html">Locales</a></li>
+        </ul>
+    </nav>
+</header>
+
+    <main class="hero">
+        <div class="hero-content">
+            <p class="hero-sub">Porque sabemos que te</p>
+            <h1>ENCANTA</h1>
+            <p class="hero-text">empezar tu dia con</p>
+            <h2 class="highlight">BUENAS</h2>
+            <h2 class="highlight-alt">VIBRAS</h2>
+            
+            <div class="cta-section">
+                <span class="arrow">➔</span>
+                <button class="btn-start">Empezar</button>
+            </div>
+        </div>
+
+        <div class="hero-image">
+            <div class="blob-bg"></div>
+            <img src="asets/imagenes/tazaCafeBienvenida.png" alt="Taza de café">
+        </div>
+    </main>
+
 </body>
 </html>
