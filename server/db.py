@@ -20,17 +20,21 @@ def validar_login(email, password):
             return usuario
     return None
 
-def crear_usuario(nombre, correo, password):
+def crear_usuario(nombre, correo, password): # Dejamos 'password' aquí para que app.py no se confunda
     try:
         cnx = mysql.connector.connect(**db_config)
         cursor = cnx.cursor()
         
-        # Encriptamos la contraseña antes de guardarla
+        # Aquí es donde se usaba 'password', por eso fallaba
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
         
-        # Insertar en la tabla Usuario
-        sql = "INSERT INTO Usuario (nombre, correo, password) VALUES (%s, %s, %s)"
+        # Lo que SI debe decir 'contraseña' es el nombre de la columna de MySQL
+        sql = "INSERT INTO Usuario (nombre, correo, contraseña) VALUES (%s, %s, %s)"
         cursor.execute(sql, (nombre, correo, hashed_password))
+        
+        # Crear el perfil de Cliente automáticamente (para el carrito)
+        user_id = cursor.lastrowid
+        cursor.execute("INSERT INTO Cliente (id_usuario) VALUES (%s)", (user_id,))
         
         cnx.commit()
         cursor.close()
