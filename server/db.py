@@ -4,7 +4,7 @@ from flask_bcrypt import Bcrypt
 
 bcrypt = Bcrypt()
 
-# Configuración usando tus variables de entorno (Asegúrate que en el .env coincidan los nombres)
+# Configuración usando tus variables de entorno
 db_config = {
     'user' : os.getenv("DB_USER"),
     'password' : os.getenv("DB_PASSWORD"),
@@ -12,27 +12,28 @@ db_config = {
     'database' : os.getenv("DB_NAME")
 }
 
+# --- FUNCIÓN DE CONEXIÓN (ESTA ES LA QUE TE FALTABA) ---
+def conectar_db():
+    return mysql.connector.connect(**db_config)
+
+# --- FUNCIONES DE USUARIO ---
+
 def validar_login(email, password):
     usuario = obtener_usuario_por_email(email)
     if usuario:
-        # Comparamos la contraseña escrita con la de la base de datos
         if bcrypt.check_password_hash(usuario['contraseña'], password):
             return usuario
     return None
 
-def crear_usuario(nombre, correo, password): # Dejamos 'password' aquí para que app.py no se confunda
+def crear_usuario(nombre, correo, password):
     try:
-        cnx = mysql.connector.connect(**db_config)
+        cnx = conectar_db()
         cursor = cnx.cursor()
-        
-        # Aquí es donde se usaba 'password', por eso fallaba
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
         
-        # Lo que SI debe decir 'contraseña' es el nombre de la columna de MySQL
         sql = "INSERT INTO Usuario (nombre, correo, contraseña) VALUES (%s, %s, %s)"
         cursor.execute(sql, (nombre, correo, hashed_password))
         
-        # Crear el perfil de Cliente automáticamente (para el carrito)
         user_id = cursor.lastrowid
         cursor.execute("INSERT INTO Cliente (id_usuario) VALUES (%s)", (user_id,))
         
@@ -46,7 +47,7 @@ def crear_usuario(nombre, correo, password): # Dejamos 'password' aquí para que
 
 def obtener_usuario_por_email(email):
     try:
-        cnx = mysql.connector.connect(**db_config)
+        cnx = conectar_db()
         cursor = cnx.cursor(dictionary=True)
         cursor.execute("SELECT * FROM Usuario WHERE correo = %s", (email,))
         usuario = cursor.fetchone()
@@ -59,33 +60,30 @@ def obtener_usuario_por_email(email):
 
 def obtener_usuario_por_id(user_id):
     try:
-        cnx = mysql.connector.connect(**db_config)
+        cnx = conectar_db()
         cursor = cnx.cursor(dictionary=True)
-        sql = """
-        SELECT u.*, tp.puntos 
-        FROM Usuario u
-        LEFT JOIN Cliente c ON u.id_usuario = c.id_usuario
-        LEFT JOIN TarjetaPuntos tp ON c.id_cliente = tp.id_cliente
-        WHERE u.id_usuario = %s
-        """
+        sql = "SELECT * FROM Usuario WHERE id_usuario = %s"
         cursor.execute(sql, (user_id,))
         usuario = cursor.fetchone()
         cursor.close()
         cnx.close()
+
+        # --- VALIDACIÓN ANTICRASH ---
+        if usuario:
+            # Si 'puntos' no está en el diccionario, lo agregamos como 0
+            if 'puntos' not in usuario or usuario['puntos'] is None:
+                usuario['puntos'] = 0
+                
         return usuario
     except mysql.connector.Error as err:
         print("Error al obtener usuario por ID:", err)
         return None
-    
 
-
-
-    
-    # ... (mantén tus funciones anteriores igual, están perfectas)
+# --- FUNCIONES DE PRODUCTOS ---
 
 def obtener_productos():
     try:
-        cnx = mysql.connector.connect(**db_config)
+        cnx = conectar_db()
         cursor = cnx.cursor(dictionary=True) 
         cursor.execute("SELECT * FROM Producto")
         productos = cursor.fetchall()
@@ -96,10 +94,9 @@ def obtener_productos():
         print("Error al obtener productos:", err)
         return []
 
-# NUEVA: Para obtener un solo producto (útil cuando agregas al carrito)
 def obtener_producto_por_id(producto_id):
     try:
-        cnx = mysql.connector.connect(**db_config)
+        cnx = conectar_db()
         cursor = cnx.cursor(dictionary=True)
         cursor.execute("SELECT * FROM Producto WHERE id_producto = %s", (producto_id,))
         producto = cursor.fetchone()
@@ -110,19 +107,53 @@ def obtener_producto_por_id(producto_id):
         print("Error al obtener el producto:", err)
         return None
 
-# NUEVA: Para ver cuánto descuento tiene un cupón (como el de tu imagen)
-def validar_promocion(codigo):
+# --- FUNCIONES DE PEDIDOS Y PUNTOS ---
+
+def guardar_pedido(user_id, total, detalles):
     try:
-        cnx = mysql.connector.connect(**db_config)
-        cursor = cnx.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM Promocion WHERE codigo = %s AND activo = TRUE", (codigo,))
-        promo = cursor.fetchone()
+        cnx = conectar_db()
+        cursor = cnx.cursor()
+        query = """
+        INSERT INTO pedidos (id_usuario, total, detalles, fecha, status) 
+        VALUES (%s, %s, %s, NOW(), 'En proceso')
+        """
+        cursor.execute(query, (user_id, total, detalles))
+        cnx.commit()
         cursor.close()
         cnx.close()
-        return promo
+        return True
     except mysql.connector.Error as err:
-        print("Error al validar promoción:", err)
-        return None
-
-
+        print("Error al guardar pedido:", err)
+        return False
     
+def sumar_puntos_usuario(id_usuario, puntos_nuevos):
+    try:
+        cnx = conectar_db()
+        cursor = cnx.cursor()
+        # COALESCE asegura que si es NULL empiece en 0
+        query = "UPDATE Usuario SET puntos = COALESCE(puntos, 0) + %s WHERE id_usuario = %s"
+        cursor.execute(query, (puntos_nuevos, id_usuario))
+        cnx.commit()
+        cursor.close()
+        cnx.close()
+    except mysql.connector.Error as err:
+        print("Error al sumar puntos:", err)
+
+def obtener_historial(user_id):
+    try:
+        cnx = conectar_db()
+        cursor = cnx.cursor(dictionary=True)
+        query = """
+        SELECT id_pedido, detalles, fecha, status, total 
+        FROM pedidos 
+        WHERE id_usuario = %s 
+        ORDER BY fecha DESC
+        """
+        cursor.execute(query, (user_id,))
+        pedidos = cursor.fetchall()
+        cursor.close()
+        cnx.close()
+        return pedidos
+    except mysql.connector.Error as err:
+        print("Error al obtener historial:", err)
+        return []

@@ -126,6 +126,17 @@ CREATE TABLE Promocion (
 );
 
 
+CREATE TABLE pedidos (
+    id_pedido INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT, 
+    total DECIMAL(10, 2),
+    detalles TEXT,
+    fecha DATETIME,
+    status VARCHAR(50),
+    FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario) 
+);
+
+
 INSERT INTO Local (nombre_local, direccion, telefono) 
 VALUES ('Good Vibes Centro', 'Av. Universidad 123', '6561234567');
 
@@ -133,7 +144,10 @@ INSERT INTO Producto (nombre, descripcion, precio, categoria, stock, id_local, t
 VALUES 
 ('Café Expreso', 'Intenso y aromático', 23.00, 'Calientes', 100, 1, 'Ch', 500),
 ('Shaky Coffee', 'Café helado con espuma', 70.00, 'Fríos', 50, 1, 'G', 1200),
-('Brown Sugar Expresso', 'Intenso y dulce', 59.30, 'Frios', 3, 1, 'G', 460);
+('Brown Sugar Expresso', 'Intenso y dulce', 59.30, 'Frios', 3, 1, 'G', 460),
+('Moka Avellana', 'Delicioso balance entre chocolate y avellana', 55.00, 'Calientes', 80, 1, 'Ch', 850),
+('Caramel Macchiato', 'Vainilla con un toque de caramelo sedoso', 62.50, 'Calientes', 120, 1, 'Med', 900),
+('Cold Brew Vainilla', 'Café extraído en frío por 12 horas con vainilla', 68.00, 'Fríos', 40, 1, 'G', 1100);
 
 ALTER TABLE Producto ADD COLUMN imagen_url VARCHAR(255) DEFAULT 'default_cafe.png';
 UPDATE Producto SET imagen_url = 'frapuchino.png' WHERE id_producto = 3;

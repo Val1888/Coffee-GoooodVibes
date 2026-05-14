@@ -255,4 +255,16 @@ main{
     text-decoration:none;
 }
 
+.invitation-btn{
+    background-color: #6f816b; 
+    color: white; 
+    padding: 12px 30px; 
+    border-radius: 25px; 
+    text-decoration: none; 
+    display: inline-block; 
+    font-family: 'Arvo', serif; 
+    font-weight: bold;
+    border: 1px solid #ffffff44;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+}
 

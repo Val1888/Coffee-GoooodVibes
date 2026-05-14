@@ -4,13 +4,45 @@
 
 {% block styles %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/historial.css') }}">
+    <style>
+        /* Estilos rápidos para el Pop-up (Modal) */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1000; 
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #f2e3d5;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 15px;
+            width: 40%;
+            text-align: center;
+            color: #2c3327;
+            font-family: 'Arvo', serif;
+        }
+        .close-btn {
+            color: #5d6d4e;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .order-link {
+            color: #2c3327;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
 <main class="history-page">
     {% if session.get('logged_in') %}
         <section class="history-container">
-
             <h2 class="history-title">Historial de Compras</h2>
 
             <div class="history-header">
@@ -22,22 +54,49 @@
             </div>
 
             <div class="history-body">
-                <div class="history-row">
-                    <div>2739</div>
-                    <div>4 productos</div>
-                    <div>20/04/2026 15:53</div>
-                    <div class="status-process">En proceso</div>
-                    <div>$163.00</div>
-                </div>
-                </div>
-
-            <div class="history-button-row">
-                <button class="history-btn" onclick="window.location.href='{{ url_for('cuenta') }}'">
-                    Volver a Mi Cuenta
-                </button>
+                {% if pedidos %}
+                    {% for pedido in pedidos %}
+                    <div class="history-row">
+                        <div>
+                            <span class="order-link" onclick="openModal('{{ pedido.id_pedido }}', '{{ pedido.detalles }}')">
+                                {{ pedido.id_pedido }}
+                            </span>
+                        </div>
+                        <div>{{ pedido.cantidad_items }} productos</div>
+                        <div>{{ pedido.fecha }}</div>
+                        <div class="status-process">{{ pedido.status }}</div>
+                        <div>${{ "{:,.2f}".format(pedido.total) }}</div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <!-- Fila de ejemplo si no hay datos en la DB aún -->
+                    <div class="history-row">
+                        <div>
+                            <span class="order-link" onclick="openModal('{{ pedido.id_pedido }}', '{{ pedido.detalles }}')">
+                                {{ pedido.id_pedido }}
+                            </span>
+                    </div>
+                {% endif %}
             </div>
 
+            <div class="history-button-row">
+                <button class="history-btn" onclick="window.location.href='{{ url_for('home') }}'">
+                    Volver
+                </button>
+            </div>
         </section>
+
+        <!-- Estructura del Pop-up -->
+        <div id="orderModal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+                <h2 id="modalOrderTitle">Pedido #</h2>
+                <hr style="border: 1px solid #5d6d4e;">
+                <p id="modalOrderDetails" style="font-size: 18px; margin: 20px 0;"></p>
+                <button class="history-btn" onclick="closeModal()">Cerrar</button>
+            </div>
+        </div>
+
     {% else %}
         <section style="text-align: center; padding: 100px;">
             <h2>¿Buscando tus pedidos?</h2>
@@ -46,4 +105,24 @@
         </section>
     {% endif %}
 </main>
+
+<script>
+    function openModal(id, detalles) {
+        document.getElementById('orderModal').style.display = "block";
+        document.getElementById('modalOrderTitle').innerText = "Detalles del Pedido #" + id;
+        document.getElementById('modalOrderDetails').innerText = detalles;
+    }
+
+    function closeModal() {
+        document.getElementById('orderModal').style.display = "none";
+    }
+
+    // Cerrar si hacen clic fuera del cuadro
+    window.onclick = function(event) {
+        let modal = document.getElementById('orderModal');
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
 {% endblock %}

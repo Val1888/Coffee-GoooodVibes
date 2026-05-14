@@ -144,3 +144,30 @@ main {
     color: #666;
     margin-top: 10px;
 }
+
+.btn-pago-dinamico {
+    background-color: #f2e3d5; 
+    color: #a8a8a8; 
+    padding: 15px 40px;
+    border-radius: 30px;
+    border: 2px solid #d1c4b9;
+    font-family: 'Arvo', serif;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: not-allowed;
+    transition: all 0.4s ease;
+    text-decoration: none;
+}
+
+.btn-pago-dinamico.active {
+    background-color: #6f816b;
+    color: white;
+    cursor: pointer;
+    border: 2px solid #5d6d4e;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.btn-pago-dinamico.active:hover {
+    background-color: #5d6d4e;
+    transform: translateY(-2px);
+}

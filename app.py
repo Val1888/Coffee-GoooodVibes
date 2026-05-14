@@ -1,13 +1,15 @@
 from dotenv import load_dotenv
 load_dotenv()
-
+from server.db import guardar_pedido, obtener_historial
 from server.db import obtener_usuario_por_id, validar_login, crear_usuario, obtener_productos
-from server.db import obtener_producto_por_id
+from server.db import obtener_producto_por_id, sumar_puntos_usuario
 import os
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_bcrypt import Bcrypt
 from server.db import obtener_usuario_por_id, validar_login, crear_usuario # Asegúrate de tener estas en db.py
 from flask import jsonify
+# Busca esta línea y asegúrate de que incluya sumar_puntos_usuario
+
 
 app = Flask(__name__, template_folder='client/templates',static_folder='static')
 app.secret_key = os.environ.get('SECRET_KEY', 'WUATAJAI')
@@ -85,24 +87,28 @@ def signup():
 @login_required
 def cuenta():
     user_id = session.get('user_id')
-    # Guardamos los datos en la variable 'usuario' para que coincida con lo de abajo
-    usuario = obtener_usuario_por_id(user_id) 
+    usuario = obtener_usuario_por_id(user_id) # Usamos tu función de db.py
     
-    if not usuario:
-        return redirect(url_for('login')) # Seguridad por si no encuentra al usuario
+    # Lógica de Niveles (Diseño Digital de Experiencia)
+    puntos = usuario['puntos'] if usuario and usuario['puntos'] else 0
     
-    # Lógica de niveles (ahora 'usuario' y 'puntos_usuario' coinciden)
-    puntos_usuario = usuario.get('puntos') or 0
-    nivel = (puntos_usuario // 100) + 1
-    
-    # Lógica de rangos
-    if nivel <= 3: rango = "Amante del Café"
-    elif nivel <= 6: rango = "Entusiasta del Café"
-    elif nivel <= 10: rango = "Maestro Cafetero"
-    else: rango = "Leyenda del Café"
+    if puntos < 500:
+        nivel = 1
+        rango = "Entuciasta del café"
+    elif puntos < 1500:
+        nivel = 2
+        rango = "Catador cafetero"
+    elif puntos < 3000:
+        nivel = 3
+        rango = "Amante de la cafeina"
+    else:
+        nivel = 4
+        rango = "Buho cafetero"
 
-    # Enviamos 'usuario' al template
-    return render_template('auth/cuenta.html', usuario=usuario, nivel=nivel, rango=rango)
+    return render_template('auth/cuenta.html', 
+                           usuario=usuario, 
+                           nivel=nivel, 
+                           rango=rango)
 
 @app.route('/pago', methods=['GET', 'POST']) # Asegúrate de permitir GET y POST
 @login_required
@@ -127,14 +133,49 @@ def pago():
     return render_template('auth/pago.html', subtotal=subtotal)
 
 @app.route('/compra-exitosa')
-@login_required
-def exito():
-    return render_template('auth/exito.html')
+def compra_exitosa():
+    items_sesion = session.get('carrito', [])
+    user_id = session.get('user_id')
+    total_final = 0
+    detalles_lista = []
+
+    # 1. Calculamos el total de la compra y armamos los detalles
+    for item in items_sesion:
+        prod_info = obtener_producto_por_id(item['id'])
+        if prod_info:
+            precio_base = float(prod_info['precio'])
+            extra = 0
+            if item['tamano'] == 'med': extra = 15
+            elif item['tamano'] == 'g': extra = 25
+            
+            precio_total_item = (precio_base + extra) * int(item['cantidad'])
+            total_final += precio_total_item
+            
+            detalles_lista.append(f"{item['cantidad']}x {prod_info['nombre']} ({item['tamano']})")
+
+    # 2. Convertimos la lista a string para la DB
+    detalles_string = ", ".join(detalles_lista)
+
+    if items_sesion:
+        # 3. Guardamos el pedido en el historial
+        guardar_pedido(user_id, total_final, detalles_string)
+        
+        # 4. Calculamos y sumamos los puntos (1 punto por cada $10 pesos)
+        puntos_ganados = int(total_final / 10)
+        sumar_puntos_usuario(user_id, puntos_ganados)
+
+    # 5. Vaciamos el carrito
+    session.pop('carrito', None)
+    return render_template('auth/compraExitosa.html')
 
 @app.route('/historial')
-@login_required
 def historial():
-    return render_template('auth/historial.html')
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+
+    mis_pedidos = obtener_historial(session['user_id'])
+    
+    return render_template('auth/historial.html', pedidos=mis_pedidos)
 
 @app.route('/cerrar-sesion-confirmacion')
 @login_required
@@ -214,6 +255,7 @@ def eliminar_del_carrito(indice):
         session.modified = True
         
     return redirect(url_for('carrito'))
+
 
 
 if __name__ == '__main__':

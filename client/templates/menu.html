@@ -49,9 +49,26 @@
     </div>
     {% endfor %}
     </section>
+    <div class="menu-footer" style="text-align: center; padding: 40px 0;">
+    <button id="btn-proseguir" class="btn-pago-dinamico" onclick="window.location.href='{{ url_for('carrito') }}'" disabled>
+        Proseguir con la compra
+    </button>
+</div>
 </main>
 
 <script>
+document.addEventListener("DOMContentLoaded", function() {
+    // 1. Verificamos cuántos productos hay en la sesión de Flask al cargar la página
+    // Si la sesión no existe, Jinja pondrá un 0.
+    const cantidadProductos = {{ session.get('carrito', []) | length }};
+    const boton = document.getElementById('btn-proseguir');
+
+    // 2. Si ya hay algo (porque regresaste de otra página), activamos el botón de inmediato
+    if (cantidadProductos > 0) {
+        activarBotonPago();
+    }
+    });
+
 function cambiarCantidad(id, cambio) {
     const input = document.getElementById('cant-' + id);
     let valorActual = parseInt(input.value);
@@ -75,12 +92,9 @@ function agregarAlCarrito(id) {
     const cant = document.getElementById('cant-' + id).value;
     const tamano = document.getElementById('tamano-' + id).value;
 
-    // Enviamos los datos al servidor
     fetch('/agregar-al-carrito', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             id: id,
             cantidad: cant,
@@ -91,11 +105,20 @@ function agregarAlCarrito(id) {
     .then(data => {
         if (data.status === 'success') {
             alert("¡Añadido! Ya puedes verlo en tu carrito ☕");
+            
+            // 3. Activamos el botón dinámicamente cuando el usuario agrega algo nuevo
+            activarBotonPago();
         }
     })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
+    .catch((error) => console.error('Error:', error));
+}
+
+function activarBotonPago() {
+    const boton = document.getElementById('btn-proseguir');
+    if (boton) {
+        boton.disabled = false;
+        boton.classList.add('active');
+    }
 }
 </script>
 {% endblock %}

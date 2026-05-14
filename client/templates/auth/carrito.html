@@ -39,9 +39,20 @@
             {% endfor %}
             
             {% if not items %}
-                <p style="text-align: center; color: white; font-size: 24px; padding-top: 40px; padding-bottom: 40px;">
-                    Tu carrito está vacío. ¡Ve por un café!
-                </p>
+                <section style="text-align: center; padding: 60px 20px;">
+                    <p style="color: white; font-size: 24px; margin-bottom: 30px; font-family: 'Arvo', serif;">
+                        Tu carrito está vacío. ¡Ve por un café!
+                    </p>
+                    
+                    <!-- Usamos directamente la etiqueta <a> con la clase de tus otros botones -->
+                    <a href="{{ url_for('menu') }}" class="invitation-btn">
+                        {% if session.get('logged_in') %} 
+                            Vamos por un café 
+                        {% else %} 
+                            Empezar 
+                        {% endif %}
+                    </a>
+                </section>
             {% endif %}
         </section>
 

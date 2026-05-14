@@ -15,22 +15,35 @@
 
             <div class="account-layout">
                 <div class="profile-section">
-                    <button class="edit-photo-btn">Editar Foto</button>
+                    <!-- Botón de foto (Funcionalidad estética por ahora) -->
+                    <button class="edit-photo-btn" onclick="document.getElementById('inputFoto').click();">
+                        Editar Foto
+                    </button>
+                    <input type="file" id="inputFoto" style="display:none;" accept="image/*">
 
                     <div class="profile-image">
+                        <!-- Aquí podrías poner un <img> si ya tienes la foto -->
                         <div class="avatar-head"></div>
                         <div class="avatar-body"></div>
                     </div>
 
-                    <h3 class="level-text">nvl: {{ nivel }}</h3>
-                    <h3 class="rank-text">{{ rango }}</h3>
-                    <p class="points-text">
-                        Puntos: {{ usuario.puntos if usuario.puntos else 0 }} pts
-                    </p>
+                    <div class="loyalty-info">
+                        <h3 class="level-text">Nivel: {{ nivel }}</h3>
+                        <h3 class="rank-text">{{ rango }}</h3>
+                        
+                        <!-- Barra de progreso visual -->
+                        <div class="progress-container" style="background: #ddd; border-radius: 10px; height: 10px; width: 80%; margin: 10px auto;">
+                            <div class="progress-bar" style="background: #6f816b; height: 100%; border-radius: 10px; width: {{ ((usuario.puntos or 0) % 1000) / 10 }}%;"></div>
+                        </div>
+
+                        <p class="points-text">
+                            <strong>{{ usuario.puntos if usuario.puntos else 0 }}</strong> pts acumulados
+                        </p>
+                    </div>
                 </div>
 
                 <div class="account-info">
-                    <h3 class="info-title">Información de la cuenta</h3>
+                    <h3 class="info-title">Información del Usuario</h3>
 
                     <div class="info-content">
                         <p><strong>Nombre:</strong> {{ usuario.nombre }}</p>
@@ -40,20 +53,21 @@
                             {% if usuario.telefono %}
                                 {{ usuario.telefono }}
                             {% else %}
-                                <span style="color: #888;">+ Ingresa un número telefónico</span>
+                                <span style="color: #6f816b; cursor: pointer;">+ Agregar teléfono</span>
                             {% endif %}
                         </p>
+                        <p><strong>Ubicación:</strong> Ciudad Juárez, Chihuahua</p>
                     </div>
                 </div>
             </div>
 
             <div class="account-buttons">
                 <button class="account-btn" onclick="window.location.href='{{ url_for('historial') }}'">
-                    Historial de Compras
+                    Ver mis Pedidos
                 </button>
 
-                <button class="account-btn" onclick="window.location.href='{{ url_for('home') }}'">
-                    Ir a inicio
+                <button class="account-btn outline" onclick="window.location.href='{{ url_for('menu') }}'">
+                    Ir a la Tienda
                 </button>
             </div>
 

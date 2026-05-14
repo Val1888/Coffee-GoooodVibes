@@ -34,7 +34,7 @@
                 <div class="payment-summary">
                     <div class="summary-line">
                         <span>Precio en puntos</span>
-                        <!-- Cálculo aproximado de puntos (1 punto por cada peso) -->
+                        <!-- Cálculo de puntos basado en el subtotal -->
                         <span>{{ (subtotal | int) * 10 if subtotal else 0 }} pts</span>
                     </div>
                     <div class="summary-line">
@@ -50,13 +50,13 @@
 
             <div class="card-box">
                 <h3 class="card-title">Información de la Tarjeta</h3>
-                <!-- El action puede ir a una ruta de 'confirmacion' o 'exito' -->
-                <form class="card-form" action="{{ url_for('home') }}" method="POST">
+                <!-- Agregamos el id="formPago" para que el botón lo reconozca -->
+                <form class="card-form" id="formPago" action="{{ url_for('compra_exitosa') }}" method="GET">
                     <input type="text" name="titular" placeholder="Titular de la Tarjeta" class="large-input" required>
-                    <input type="text" name="cuenta" placeholder="No. de Cuenta (16 dígitos)" class="large-input" required maxlength="16">
+                    <input type="text" name="cuenta" placeholder="No. de Cuenta (16 dígitos)" class="large-input" required maxlength="16" pattern="\d*">
                     <div class="small-input-row">
                         <input type="text" name="exp" placeholder="MM/AA" class="small-input" required maxlength="5">
-                        <input type="password" name="cvv" placeholder="CVV" class="small-input" required maxlength="3">
+                        <input type="password" name="cvv" placeholder="CVV" class="small-input" required maxlength="3" pattern="\d*">
                     </div>
                     <p class="terms">Al proceder, aceptas nuestros términos y condiciones de servicio.</p>
                 </form>
@@ -68,8 +68,9 @@
             <a href="{{ url_for('carrito') }}" class="payment-btn" style="text-decoration: none; display: flex; justify-content: center; align-items: center;">
                 Volver
             </a>
-            <!-- El botón de pagar ahora es parte del flujo del formulario -->
-            <button class="payment-btn" type="submit" form="payment-form">
+            
+            <!-- Este botón ahora envía el formulario "formPago" automáticamente -->
+            <button class="payment-btn" type="submit" form="formPago">
                 Pagar Ahora
             </button>
         </section>
