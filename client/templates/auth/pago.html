@@ -17,15 +17,15 @@
                     <div class="method-header">Selecciona tu método de pago</div>
                     <div class="method-content">
                         <label class="radio-row">
-                            <input type="radio" name="payment" checked>
+                            <input type="radio" name="payment_type" value="debito" checked>
                             <span>Tarjeta de Débito</span>
                         </label>
                         <label class="radio-row">
-                            <input type="radio" name="payment">
+                            <input type="radio" name="payment_type" value="credito">
                             <span>Tarjeta de Crédito</span>
                         </label>
                         <label class="radio-row">
-                            <input type="radio" name="payment">
+                            <input type="radio" name="payment_type" value="puntos">
                             <span>Puntos</span>
                         </label>
                     </div>
@@ -34,46 +34,50 @@
                 <div class="payment-summary">
                     <div class="summary-line">
                         <span>Precio en puntos</span>
-                        <span>500 pts</span>
+                        <!-- Cálculo aproximado de puntos (1 punto por cada peso) -->
+                        <span>{{ (subtotal | int) * 10 if subtotal else 0 }} pts</span>
                     </div>
                     <div class="summary-line">
                         <span>Descuento</span>
-                        <span>—</span>
+                        <span>$0.00</span>
                     </div>
-                    <div class="summary-line">
-                        <span>Total</span>
-                        <span>$163.00</span>
+                    <div class="summary-line" style="font-weight: bold; border-top: 1px solid #6f816b; padding-top: 10px; margin-top: 10px;">
+                        <span>Total a Pagar</span>
+                        <span>${{ "{:,.2f}".format(subtotal) if subtotal else "0.00" }}</span>
                     </div>
                 </div>
             </div>
 
             <div class="card-box">
                 <h3 class="card-title">Información de la Tarjeta</h3>
-                <form class="card-form">
-                    <input type="text" placeholder="Titular de la Tarjeta" class="large-input">
-                    <input type="text" placeholder="No. de Cuenta" class="large-input">
+                <!-- El action puede ir a una ruta de 'confirmacion' o 'exito' -->
+                <form class="card-form" action="{{ url_for('home') }}" method="POST">
+                    <input type="text" name="titular" placeholder="Titular de la Tarjeta" class="large-input" required>
+                    <input type="text" name="cuenta" placeholder="No. de Cuenta (16 dígitos)" class="large-input" required maxlength="16">
                     <div class="small-input-row">
-                        <input type="text" placeholder="Fecha Exp" class="small-input">
-                        <input type="text" placeholder="CVV" class="small-input">
+                        <input type="text" name="exp" placeholder="MM/AA" class="small-input" required maxlength="5">
+                        <input type="password" name="cvv" placeholder="CVV" class="small-input" required maxlength="3">
                     </div>
-                    <p class="terms">Aplican términos y condiciones</p>
+                    <p class="terms">Al proceder, aceptas nuestros términos y condiciones de servicio.</p>
                 </form>
             </div>
         </section>
 
         <section class="payment-buttons">
-            <button class="payment-btn" onclick="window.location.href='{{ url_for('pago') }}'">
+            <!-- Botón para regresar al carrito -->
+            <a href="{{ url_for('carrito') }}" class="payment-btn" style="text-decoration: none; display: flex; justify-content: center; align-items: center;">
                 Volver
-            </button>
-            <button class="payment-btn" type="submit">
-                Pagar
+            </a>
+            <!-- El botón de pagar ahora es parte del flujo del formulario -->
+            <button class="payment-btn" type="submit" form="payment-form">
+                Pagar Ahora
             </button>
         </section>
     {% else %}
-        <section style="text-align: center; padding: 100px;">
-            <h2>¡Casi listo para tu café!</h2>
-            <p>Pero primero necesitamos saber quién eres. Inicia sesión para completar tu compra.</p>
-            <a href="{{ url_for('login') }}" class="button">Ir al Login</a>
+        <section style="text-align: center; padding: 100px 20px;">
+            <h2 style="font-size: 36px;">¡Casi listo para tu café!</h2>
+            <p style="font-size: 20px; margin-bottom: 30px;">Pero primero necesitamos saber quién eres. Inicia sesión para completar tu compra.</p>
+            <a href="{{ url_for('login') }}" class="button" style="text-decoration: none; display: inline-block;">Ir al Login</a>
         </section>
     {% endif %}
 </main>

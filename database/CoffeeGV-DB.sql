@@ -66,7 +66,7 @@ CREATE TABLE Orden (
     total DECIMAL(10,2) NOT NULL,
     estado VARCHAR(30) DEFAULT 'Pendiente',
     id_cliente INT NOT NULL,
-    id_trabajador INT NOT NULL,
+    id_trabajador INT NULL,
 
     FOREIGN KEY (id_cliente)
         REFERENCES Cliente(id_cliente)
@@ -82,17 +82,22 @@ CREATE TABLE Orden (
 CREATE TABLE Producto (
     id_producto INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(100) NOT NULL,
+    tamano VARCHAR(10),
     descripcion VARCHAR(255),
     precio DECIMAL(10,2) NOT NULL,
+    precio_puntos INT,
     categoria VARCHAR(50),
     stock INT DEFAULT 0,
     id_local INT NOT NULL,
+    imagen_url VARCHAR(255) DEFAULT 'default_cafe.png',
 
     FOREIGN KEY (id_local)
         REFERENCES Local(id_local)
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
+
+
 
 CREATE TABLE DetalleOrden (
     id_detalle INT PRIMARY KEY AUTO_INCREMENT,
@@ -111,3 +116,24 @@ CREATE TABLE DetalleOrden (
         ON DELETE RESTRICT
         ON UPDATE CASCADE
 );
+
+
+CREATE TABLE Promocion (
+    id_promocion INT PRIMARY KEY AUTO_INCREMENT,
+    codigo VARCHAR(20) UNIQUE NOT NULL,
+    descuento_porcentaje DECIMAL(5,2),
+    activo BOOLEAN DEFAULT TRUE
+);
+
+
+INSERT INTO Local (nombre_local, direccion, telefono) 
+VALUES ('Good Vibes Centro', 'Av. Universidad 123', '6561234567');
+
+INSERT INTO Producto (nombre, descripcion, precio, categoria, stock, id_local, tamano, precio_puntos) 
+VALUES 
+('Café Expreso', 'Intenso y aromático', 23.00, 'Calientes', 100, 1, 'Ch', 500),
+('Shaky Coffee', 'Café helado con espuma', 70.00, 'Fríos', 50, 1, 'G', 1200),
+('Brown Sugar Expresso', 'Intenso y dulce', 59.30, 'Frios', 3, 1, 'G', 460);
+
+ALTER TABLE Producto ADD COLUMN imagen_url VARCHAR(255) DEFAULT 'default_cafe.png';
+UPDATE Producto SET imagen_url = 'frapuchino.png' WHERE id_producto = 3;

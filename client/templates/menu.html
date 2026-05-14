@@ -8,95 +8,94 @@
 
 {% block content %}
 <main>
-
-    <h2 class="section-title">
-        Nuestros Mejores Cafés
-    </h2>
+    <h2 class="section-title">Nuestros Mejores Cafés</h2>
 
     <section class="products-grid">
-
-        <div class="product-card">
-            {% if session.get('logged_in') %}
-                <div class="quantity-circle">1</div>
-            {% endif %}
-            
-            <div class="product-image">
-            <img src="{{ url_for('static', filename='imagenes/latte_frio.png') }}" alt="Frapuchino">
-            </div>
-            <h3 class="product-name">Frapuchino</h3>
-            <p class="product-price">$23.00</p>
+    {% for producto in productos %}
+    <div class="product-card">
+        <div class="decoracion-florecita">
+            <img src="{{ url_for('static', filename='imagenes/' + producto.imagen_url) }}" 
+                 alt="{{ producto.nombre }}">
         </div>
+        
+        <h3>{{ producto.nombre }}</h3>
+        
+        <!-- AGREGAMOS EL ID AQUÍ PARA EL JAVASCRIPT -->
+        <p class="precio" id="display-precio-{{ producto.id_producto }}">${{ producto.precio }}</p>
 
-        <div class="product-card">
-            {% if session.get('logged_in') %}
-                <div class="quantity-circle">0</div>
-            {% endif %}
-            
-            <div class="product-image">
-            <img src="{{ url_for('static', filename='imagenes/latte.png') }}" alt="Frapuchino">
+        {% if session['logged_in'] %}
+            <div class="selector-tamano">
+                <label for="tamano-{{ producto.id_producto }}">Tamaño:</label>
+                <select name="tamano" id="tamano-{{ producto.id_producto }}" onchange="actualizarPrecio('{{ producto.id_producto }}', {{ producto.precio }})">
+                    <option value="ch" data-extra="0">Chico</option>
+                    <option value="med" data-extra="15">Mediano (+$15)</option>
+                    <option value="g" data-extra="25">Grande (+$25)</option>
+                </select>
             </div>
-            <h3 class="product-name">Caramelo</h3>
-            <p class="product-price">$23.00</p>
-        </div>
 
-            <div class="product-card">
-            {% if session.get('logged_in') %}
-                <div class="quantity-circle">0</div>
-            {% endif %}
-            
-           <div class="product-image">
-            <img src="{{ url_for('static', filename='imagenes/americano.png') }}" alt="Frapuchino">
+            <div class="controles-cantidad">
+                <button type="button" class="btn-menos" onclick="cambiarCantidad('{{ producto.id_producto }}', -1)">-</button>
+                <input type="number" id="cant-{{ producto.id_producto }}" value="1" min="1" readonly>
+                <button type="button" class="btn-mas" onclick="cambiarCantidad('{{ producto.id_producto }}', 1)">+</button>
             </div>
-            <h3 class="product-name">Descafeinado</h3>
-            <p class="product-price">$20.00</p>
-        </div>
 
-    </section>
-
-    <div class="offer-title-wrapper">
-        <div class="arrow">↘</div>
-        <h2 class="section-title">
-            Nuestras mejores ofertas
-        </h2>
+            <button class="btn-agregar" onclick="agregarAlCarrito('{{ producto.id_producto }}')">
+                Agregar al carrito
+            </button>
+        {% else %}
+            <p class="login-msg">Inicia sesión para pedir este café</p>
+            <a href="{{ url_for('login') }}" class="btn-login-small">Log In</a>
+        {% endif %}
     </div>
-
-    <section class="products-grid">
-        <div class="product-card">
-            {% if session.get('logged_in') %}
-                <div class="quantity-circle">0</div>
-            {% endif %}
-            <div class="product-image">
-            <img src="{{ url_for('static', filename='imagenes/termodecafe.png') }}" alt="Frapuchino">
-             </div>
-            <h3 class="product-name">Termo de cafe </h3>
-            <p class="product-price">$80.00</p>
-           
-        </div>
-
-         <div class="product-card">
-            {% if session.get('logged_in') %}
-                <div class="quantity-circle">0</div>
-            {% endif %}
-            <div class="product-image">
-            <img src="{{ url_for('static', filename='imagenes/pindecafe.png') }}" alt="Frapuchino">
-             </div>
-            <h3 class="product-name">Pin de cafe </h3>
-            <p class="product-price">$20.00</p>
-           
-        </div>
-
-       <div class="product-card">
-            {% if session.get('logged_in') %}
-                <div class="quantity-circle">0</div>
-            {% endif %}
-            <div class="product-image">
-            <img src="{{ url_for('static', filename='imagenes/bolsadecafe.png') }}" alt="Frapuchino">
-             </div>
-            <h3 class="product-name">Bolsa de cafe </h3>
-            <p class="product-price">$130.00</p>
-        </div>
-
+    {% endfor %}
     </section>
-
 </main>
+
+<script>
+function cambiarCantidad(id, cambio) {
+    const input = document.getElementById('cant-' + id);
+    let valorActual = parseInt(input.value);
+    valorActual += cambio;
+    if (valorActual < 1) valorActual = 1;
+    input.value = valorActual;
+}
+
+function actualizarPrecio(id, precioBase) {
+    const selector = document.getElementById('tamano-' + id);
+    const display = document.getElementById('display-precio-' + id);
+    
+    // Obtenemos el costo extra del atributo 'data-extra'
+    const extra = parseFloat(selector.options[selector.selectedIndex].getAttribute('data-extra'));
+    
+    const nuevoPrecio = precioBase + extra;
+    display.innerText = '$' + nuevoPrecio.toFixed(2);
+}
+
+function agregarAlCarrito(id) {
+    const cant = document.getElementById('cant-' + id).value;
+    const tamano = document.getElementById('tamano-' + id).value;
+
+    // Enviamos los datos al servidor
+    fetch('/agregar-al-carrito', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            id: id,
+            cantidad: cant,
+            tamano: tamano
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert("¡Añadido! Ya puedes verlo en tu carrito ☕");
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+</script>
 {% endblock %}

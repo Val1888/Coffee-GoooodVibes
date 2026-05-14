@@ -76,3 +76,53 @@ def obtener_usuario_por_id(user_id):
     except mysql.connector.Error as err:
         print("Error al obtener usuario por ID:", err)
         return None
+    
+
+
+
+    
+    # ... (mantén tus funciones anteriores igual, están perfectas)
+
+def obtener_productos():
+    try:
+        cnx = mysql.connector.connect(**db_config)
+        cursor = cnx.cursor(dictionary=True) 
+        cursor.execute("SELECT * FROM Producto")
+        productos = cursor.fetchall()
+        cursor.close()
+        cnx.close()
+        return productos
+    except mysql.connector.Error as err:
+        print("Error al obtener productos:", err)
+        return []
+
+# NUEVA: Para obtener un solo producto (útil cuando agregas al carrito)
+def obtener_producto_por_id(producto_id):
+    try:
+        cnx = mysql.connector.connect(**db_config)
+        cursor = cnx.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM Producto WHERE id_producto = %s", (producto_id,))
+        producto = cursor.fetchone()
+        cursor.close()
+        cnx.close()
+        return producto
+    except mysql.connector.Error as err:
+        print("Error al obtener el producto:", err)
+        return None
+
+# NUEVA: Para ver cuánto descuento tiene un cupón (como el de tu imagen)
+def validar_promocion(codigo):
+    try:
+        cnx = mysql.connector.connect(**db_config)
+        cursor = cnx.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM Promocion WHERE codigo = %s AND activo = TRUE", (codigo,))
+        promo = cursor.fetchone()
+        cursor.close()
+        cnx.close()
+        return promo
+    except mysql.connector.Error as err:
+        print("Error al validar promoción:", err)
+        return None
+
+
+    

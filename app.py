@@ -1,12 +1,15 @@
 from dotenv import load_dotenv
 load_dotenv()
 
+from server.db import obtener_usuario_por_id, validar_login, crear_usuario, obtener_productos
+from server.db import obtener_producto_por_id
 import os
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_bcrypt import Bcrypt
 from server.db import obtener_usuario_por_id, validar_login, crear_usuario # Asegúrate de tener estas en db.py
+from flask import jsonify
 
-app = Flask(__name__, template_folder='client/templates')
+app = Flask(__name__, template_folder='client/templates',static_folder='static')
 app.secret_key = os.environ.get('SECRET_KEY', 'WUATAJAI')
 bcrypt = Bcrypt(app)
 
@@ -28,7 +31,8 @@ def home():
 
 @app.route('/menu')
 def menu():
-    return render_template('menu.html')
+    lista_productos = obtener_productos()
+    return render_template('menu.html', productos=lista_productos)
 
 @app.route('/nosotros')
 def nosotros():
@@ -100,10 +104,27 @@ def cuenta():
     # Enviamos 'usuario' al template
     return render_template('auth/cuenta.html', usuario=usuario, nivel=nivel, rango=rango)
 
-@app.route('/pago')
+@app.route('/pago', methods=['GET', 'POST']) # Asegúrate de permitir GET y POST
 @login_required
 def pago():
-    return render_template('auth/pago.html', total=163.00, puntos_precio=500)
+    items_sesion = session.get('carrito', [])
+    subtotal = 0
+    
+    for item in items_sesion:
+        # Usamos tu función para traer el precio base
+        prod_info = obtener_producto_por_id(item['id'])
+        
+        if prod_info:
+            precio_base = float(prod_info['precio'])
+            extra = 0
+            if item['tamano'] == 'med': extra = 15
+            elif item['tamano'] == 'g': extra = 25
+            
+            precio_unitario = precio_base + extra
+            subtotal += precio_unitario * int(item['cantidad'])
+
+    # ¡Aquí está el truco! Pasamos el subtotal al template de pago
+    return render_template('auth/pago.html', subtotal=subtotal)
 
 @app.route('/compra-exitosa')
 @login_required
@@ -125,5 +146,76 @@ def logout():
     session.clear()
     return redirect(url_for('home'))
 
+
+@app.route('/carrito')
+@login_required
+def carrito():
+    items_sesion = session.get('carrito', [])
+    carrito_final = []
+    subtotal = 0
+    
+    for item in items_sesion:
+        # Usamos TU función obtener_producto_por_id
+        prod_info = obtener_producto_por_id(item['id'])
+        
+        if prod_info:
+            # Calculamos el precio con los extras
+            precio_base = float(prod_info['precio'])
+            extra = 0
+            if item['tamano'] == 'med': extra = 15
+            elif item['tamano'] == 'g': extra = 25
+            
+            precio_unitario = precio_base + extra
+            total_item = precio_unitario * int(item['cantidad'])
+            
+            # Guardamos todo lo necesario para la tabla
+            carrito_final.append({
+                'nombre': prod_info['nombre'],
+                'tamano': item['tamano'],
+                'cantidad': item['cantidad'],
+                'precio_unitario': precio_unitario,
+                'total': total_item
+            })
+            subtotal += total_item
+
+    # Le pasamos los datos a tu template
+    return render_template('auth/carrito.html', items=carrito_final, subtotal=subtotal)
+@app.route('/agregar-al-carrito', methods=['POST'])
+@login_required
+def agregar_al_carrito_route():
+    data = request.get_json()
+    id_producto = data.get('id')
+    cantidad = int(data.get('cantidad'))
+    tamano = data.get('tamano')
+    
+    # Inicializamos el carrito en la sesión si no existe
+    if 'carrito' not in session:
+        session['carrito'] = []
+    
+    # Agregamos el producto (puedes mejorar esto luego para sumar cantidades si el ID ya existe)
+    session['carrito'].append({
+        'id': id_producto,
+        'cantidad': cantidad,
+        'tamano': tamano
+    })
+    
+    session.modified = True # Importante para que Flask guarde los cambios en la sesión
+    return jsonify({"status": "success", "message": "¡Café añadido!"})
+
+@app.route('/eliminar-del-carrito/<int:indice>')
+@login_required
+def eliminar_del_carrito(indice):
+    carrito = session.get('carrito', [])
+    
+    # Verificamos que el índice sea válido antes de borrar
+    if 0 <= indice < len(carrito):
+        carrito.pop(indice)
+        session['carrito'] = carrito
+        session.modified = True
+        
+    return redirect(url_for('carrito'))
+
+
 if __name__ == '__main__':
     app.run(debug=True)
+

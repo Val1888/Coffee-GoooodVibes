@@ -1,39 +1,41 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Good Vibes Coffee</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&family=Lora:ital@1&display=swap" rel="stylesheet">
-</head>
-<body>
-
 {% extends "navbar.html" %}
 
 {% block title %} Inicio - Good Vibes {% endblock %}
 
-{% block content %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% endblock %}
 
-    <main class="hero">
-        <div class="hero-content">
+{% block content %}
+<main class="hero">
+    <div class="hero-content">
+        {% if session.get('logged_in') %}
+            <!-- Vista personalizada para Gamaliel -->
+            <p class="hero-sub">Bienvenido/a de vuelta,</p>
+            <h1 style="font-size: 80px;">{{ session.get('nombre', 'Usuario') }}</h1>
+            <p class="hero-text">¿Como te gustaría empezar</p>
+            <h2 class="highlight">TU</h2>
+            <h2 class="highlight-alt">DÍA?</h2>
+        {% else %}
+            <!-- Vista original para visitantes -->
             <p class="hero-sub">Porque sabemos que te</p>
             <h1>ENCANTA</h1>
             <p class="hero-text">empezar tu dia con</p>
             <h2 class="highlight">BUENAS</h2>
             <h2 class="highlight-alt">VIBRAS</h2>
-            
-            <div class="cta-section">
-                <span class="arrow">➔</span>
-                <button class="btn-start">Empezar</button>
-            </div>
+        {% endif %}
+        
+        <div class="cta-section" style="margin-top: 30px; display: flex; align-items: center; gap: 20px;">
+            <span class="arrow" style="font-size: 40px; color: var(--accent-cream);">➔</span>
+            <a href="{{ url_for('menu') }}" class="btn-start" style="text-decoration: none; display: inline-block; text-align: center;">
+                {% if session.get('logged_in') %} Ver Menú {% else %} Empezar {% endif %}
+            </a>
         </div>
+    </div>
 
-        <div class="hero-image">
-            <div class="blob-bg"></div>
-<img src="{{ url_for('static', filename='imagenes/cafelove.png') }}" alt="Taza de café">
-       </div>
-    </main>
+    <div class="hero-image">
+        <div class="blob-bg"></div>
+        <img src="{{ url_for('static', filename='imagenes/cafelove.png') }}" alt="Taza de café">
+    </div>
+</main>
 {% endblock %}
-</body>
-</html>
